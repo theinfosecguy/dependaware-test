@@ -25,15 +25,14 @@ jobs:
           echo "::set-output name=branches::$branches"
 
       - name: Create Pull Requests
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ""
-          delete-branch: true
-          title: "chore: update {name} to {latest_version}"
-          commit-message: "chore: update {name} to {latest_version}"
-          body: "This PR updates {name} to {latest_version}"
-          labels: "dependencies"
-          base: "main"
+        run: |
+          branches=${{ steps.get_branches.outputs.branches }}
+          IFS=',' read -ra branch_list <<< "$branches"
+          for branch in "${branch_list[@]}"; do
+            echo "Creating PR for branch: $branch"
+            pr_title=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/chore: update \1 to \2/')
+            pr_body=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/This PR updates \1 to \2/')
+            gh pr create --repo ${{ github.repository }} --base main --head $branch --title "$pr_title" --body "$pr_body" --label "dependencies" --token ${{ secrets.GITHUB_TOKEN }}
+          done
         env:
-          BRANCHES: ${{ steps.get_branches.outputs.branches }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
