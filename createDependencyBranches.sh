@@ -17,6 +17,6 @@ for DEPENDENCY in $DEPENDENCIES; do
   executeCommand "npm install $DEPENDENCY@$LATEST_VERSION"
   executeCommand "git add package*.json"
   executeCommand "git commit -m \"chore: update $DEPENDENCY to $LATEST_VERSION\""
-  executeCommand "git push origin $BRANCH_NAME"
+  executeCommand "git push https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git $branch_name"
   executeCommand "git checkout main"
 done
