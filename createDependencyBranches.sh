@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "GH_PAT: ${GH_PAT}"
+
 function executeCommand() {
   command="$1"
   echo "Executing: $command"
