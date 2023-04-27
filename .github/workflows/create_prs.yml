@@ -1,0 +1,28 @@
+name: Create Pull Requests for Dependency Updates
+
+on:
+  repository_dispatch:
+    types:
+      - outdated-dependencies
+
+jobs:
+  create_prs:
+    runs-on: ubuntu-latest
+    if: github.event.client_payload.has_outdated_dependencies == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create Pull Requests
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ""
+          delete-branch: true
+          title: "chore: update {name} to {latest_version}"
+          commit-message: "chore: update {name} to {latest_version}"
+          body: "This PR updates {name} to {latest_version}"
+          labels: "dependencies"
+          base: "main"
+          branch-prefix: "update-"
