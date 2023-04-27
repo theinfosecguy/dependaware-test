@@ -33,7 +33,7 @@ jobs:
             echo "Creating PR for branch: $branch"
             pr_title=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/chore: update \1 to \2/')
             pr_body=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/This PR updates \1 to \2/')
-            gh pr create --repo ${{ github.repository }} --base main --head $branch --title "$pr_title" --body "$pr_body" --label "dependencies" --token ${{ secrets.GITHUB_TOKEN }}
+            GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr create --repo ${{ github.repository }} --base main --head $branch --title "$pr_title" --body "$pr_body" --label "dependencies"
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
