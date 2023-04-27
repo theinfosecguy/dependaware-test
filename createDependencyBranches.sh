@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "GH_PAT: ${GH_PAT}"
 git config --global user.email "keshavaarav22@gmail.com"
 git config --global user.name "Keshav Malik"
 
