@@ -14,6 +14,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Fetch all branches
+        run: git fetch --no-tags --prune --depth=1 origin '+refs/heads/*:refs/remotes/origin/*'
+
+      - name: Get list of outdated dependency branches
+        id: get_branches
+        run: |
+          branches=$(git branch --remote --list 'origin/update-*' | sed 's/origin\///')
+          branches="${branches//$'\n'/,}"
+          echo "::set-output name=branches::$branches"
+
       - name: Create Pull Requests
         uses: peter-evans/create-pull-request@v3
         with:
@@ -25,4 +35,5 @@ jobs:
           body: "This PR updates {name} to {latest_version}"
           labels: "dependencies"
           base: "main"
-          branch-prefix: "update-"
+        env:
+          BRANCHES: ${{ steps.get_branches.outputs.branches }}
