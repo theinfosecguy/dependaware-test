@@ -29,6 +29,7 @@ jobs:
           branches=${{ steps.get_branches.outputs.branches }}
           IFS=',' read -ra branch_list <<< "$branches"
           for branch in "${branch_list[@]}"; do
+            branch=$(echo "$branch" | xargs)  # Trim the spaces
             echo "Creating PR for branch: $branch"
             pr_title=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/chore: update \1 to \2/')
             pr_body=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/This PR updates \1 to \2/')
