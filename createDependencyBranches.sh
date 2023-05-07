@@ -20,7 +20,8 @@ for DEPENDENCY in $DEPENDENCIES; do
   executeCommand "npm install $DEPENDENCY@$LATEST_VERSION"
   
   # Rebase the branch to be up-to-date with the main branch and resolve conflicts in package-lock.json
-  executeCommand "git rebase main"
+  executeCommand "git fetch origin main"
+  executeCommand "git rebase origin/main"
   executeCommand "rm package-lock.json"
   executeCommand "npm install"
 
