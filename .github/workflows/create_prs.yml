@@ -30,10 +30,18 @@ jobs:
           IFS=',' read -ra branch_list <<< "$branches"
           for branch in "${branch_list[@]}"; do
             branch=$(echo "$branch" | xargs)  # Trim the spaces
-            echo "Creating PR for branch: $branch"
+            echo "Checking for existing PR for branch: $branch"
             pr_title=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/DependAware: update \1 to \2/')
             pr_body=$(echo $branch | sed 's/update-\(.*\)-\(.*\)/This PR updates version \1 to version \2/')
-            GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr create --repo ${{ github.repository }} --base main --head $branch --title "$pr_title" --body "$pr_body" --label "dependencies"
+            
+            existing_pr=$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:$branch" | jq '.[] | select(.title=="'$pr_title'")')
+            
+            if [ -z "$existing_pr" ]; then
+              echo "Creating PR for branch: $branch"
+              gh pr create --repo ${{ github.repository }} --base main --head $branch --title "$pr_title" --body "$pr_body" --label "dependencies"
+            else
+              echo "PR already exists for branch: $branch"
+            fi
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
