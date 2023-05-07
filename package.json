@@ -21,9 +21,10 @@
     "nodemon": "^2.0.12",
     "pg": "^8.7.1",
     "sequelize": "^6.6.5",
-    "sharp": "^0.29.3",
+    "sharp": "^0.29.1",
     "sqlite3": "^5.1.6",
-    "swagger-ui-express": "^4.6.2"
+    "swagger-ui-express": "^4.6.2",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "chai": "^4.3.7",
