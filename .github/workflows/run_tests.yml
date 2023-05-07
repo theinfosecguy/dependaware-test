@@ -39,7 +39,9 @@ jobs:
           fi
 
           pr_number=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
-          pr_description=$(gh pr view --json body -R ${{ github.repository }} $pr_number | jq -r '.body')
+          pr_description=$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number | jq -r '.body')
           updated_description="${pr_description}\n\n${test_result}"
 
-          gh pr update --body "$updated_description" -R ${{ github.repository }} $pr_number
+          curl -s -X PATCH -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+            -d "{\"body\": \"$updated_description\"}" \
+            https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number
