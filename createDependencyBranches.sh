@@ -20,6 +20,12 @@ for DEPENDENCY in $DEPENDENCIES; do
   executeCommand "npm install $DEPENDENCY@$LATEST_VERSION"
   executeCommand "git add package*.json"
   executeCommand "git commit -m \"DependAware: Update $DEPENDENCY to $LATEST_VERSION\""
-  executeCommand "git push https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git $branch_name"
+
+  # Add the following lines to update package-lock.json
+  executeCommand "npm install"
+  executeCommand "git add package-lock.json"
+  executeCommand "git commit -m \"DependAware: Update package-lock.json\""
+
+  executeCommand "git push https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git $BRANCH_NAME"
   executeCommand "git checkout main"
 done
