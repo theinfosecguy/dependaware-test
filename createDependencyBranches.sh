@@ -18,14 +18,15 @@ for DEPENDENCY in $DEPENDENCIES; do
 
   executeCommand "git checkout -b $BRANCH_NAME"
   executeCommand "npm install $DEPENDENCY@$LATEST_VERSION"
+  
+  # Rebase the branch to be up-to-date with the main branch and resolve conflicts in package-lock.json
+  executeCommand "git rebase main"
+  executeCommand "rm package-lock.json"
+  executeCommand "npm install"
+
   executeCommand "git add package*.json"
   executeCommand "git commit -m \"DependAware: Update $DEPENDENCY to $LATEST_VERSION\""
-
-  # Add the following lines to update package-lock.json
-  executeCommand "npm install"
-  executeCommand "git add package-lock.json"
-  executeCommand "git commit -m \"DependAware: Update package-lock.json\""
-
+  
   executeCommand "git push https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git $BRANCH_NAME"
   executeCommand "git checkout main"
 done
