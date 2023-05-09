@@ -1,4 +1,4 @@
-## DependAware - Automatic Dependency Update
+## DependAware - Automatic Dependency Update 🚀
 DependAware is an automated dependency update tool for NPM repositories that creates pull requests for updating package dependencies in your repositories. It helps you keep your projects up-to-date and secure by automatically updating outdated or vulnerable dependencies.
 
 ## Features
@@ -6,6 +6,9 @@ DependAware is an automated dependency update tool for NPM repositories that cre
 - Creates pull requests for each updated dependency with detailed titles and descriptions
 - Easy integration with GitHub Actions
 - Adds the "dependencies" label to the pull requests
+- Runs tests for each pull request and updates the PR description with the test results
+- Supports manually triggering the workflows or configuring them to run automatically
+- Handles existing pull requests gracefully without causing job failures
 
 ## Prerequisites
 - A GitHub repository with an NPM project
@@ -37,4 +40,13 @@ Follow these steps to set up DependAware in your repository:
 
 8. Navigate to the "Actions" tab in your repository and manually trigger the "Check Dependencies" and "Create Pull Requests" workflows.
 
-DependAware will now scan your NPM project, create branches for each outdated dependency, and create pull requests for each branch with detailed titles and descriptions, and labeled with "dependencies".
+DependAware will now scan your NPM project, create branches for each outdated dependency, and create pull requests for each branch with detailed titles and descriptions, and labeled with "dependencies". It will also run tests for each pull request and update the PR description with the test results.
+
+## Potential New Features 💡
+- Automatic merging of pull requests when tests pass
+- Customizable test commands and branch naming conventions
+- Support for other package managers such as Yarn, Pip, and Composer
+- Integration with other CI/CD platforms like GitLab CI/CD or Bitbucket Pipelines
+- Automatic notification of dependency updates via email or other communication channels
+
+Feel free to contribute to this project and help implement these new features or suggest additional ones!
