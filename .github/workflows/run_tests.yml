@@ -5,46 +5,30 @@ on:
     types:
       - opened
       - synchronize
+      - labeled
 
 jobs:
   test-and-update-pr:
     runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
-      - name: Check if PR has dependencies label
-        id: check_label
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pr_number=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
-          labels=$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number/labels | jq -r '.[].name')
-          if [[ $labels == *"dependencies"* ]]; then
-            echo "::set-output name=run_job::true"
-          else
-            echo "::set-output name=run_job::false"
-          fi
-
       - name: Checkout code
-        if: steps.check_label.outputs.run_job == 'true'
         uses: actions/checkout@v2
 
       - name: Setup Node.js
-        if: steps.check_label.outputs.run_job == 'true'
         uses: actions/setup-node@v2
         with:
           node-version: 16
 
       - name: Install dependencies
-        if: steps.check_label.outputs.run_job == 'true'
         run: npm ci
 
       - name: Run tests
-        if: steps.check_label.outputs.run_job == 'true'
         id: run_tests
         continue-on-error: true
         run: npm test
 
       - name: Update PR description
-        if: steps.check_label.outputs.run_job == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
