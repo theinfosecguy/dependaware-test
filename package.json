@@ -1,6 +1,6 @@
 {
   "name": "sdm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "sequelize": "^6.6.5",
     "sharp": "^0.29.1",
     "sqlite3": "^5.1.6",
-    "swagger-ui-express": "^4.6.2"
+    "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
     "chai": "^4.3.7",
